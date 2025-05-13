@@ -935,33 +935,6 @@
 		}
 	</style>
 
-	<script type="text/javascript">
-
-		function showNotification(notificationElementId) {
-		  	let notification = document.getElementById(notificationElementId)
-		    notification.className = "show";
-		    setTimeout(() => { 
-		    	notification.className = notification.className.replace("show", ""); 
-		    }, 2900);
-		}
-		
-		function copyToClipboard(text) {
-			navigator.clipboard.writeText(text);
-		}
-
-		const buttonSwitchTheme = document.getElementById('btnSwitchTheme');
-		buttonSwitchTheme.checked = currentThemeSetting === 'dark';
-		buttonSwitchTheme.addEventListener("click", () => {
-			  const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
-			  setTheme(newTheme);			  
-		});
-
-		const links = document.getElementsByClassName('self-link');
-		Array.from(links).forEach(link => {
-			link.href = link.href.replace('{link}', window.location.href);
-		});
-
-	</script>
 
 	<script>
 		document.addEventListener('DOMContentLoaded', function() {
@@ -1011,7 +984,7 @@
 						</span>
 						Чат поддержки
 					</a>
-					<button class="user-info-btn user-info-btn-copy" type="button" onclick="copyToClipboard(window.location.href); showNotification('toast');">
+					<button id="copy-subscription-btn" class="user-info-btn user-info-btn-copy" type="button" style="margin-bottom: 0.7rem;">
 						<span class="user-info-btn-icon">
 							<svg width="20" height="20" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
 						</span>
@@ -1055,11 +1028,12 @@
 										<div class="step-content">
 											<div class="step-title">Добавить подписку</div>
 											<div class="step-desc">Нажмите кнопку ниже — приложение откроется, и подписка добавится автоматически.</div>
-											<a href="happ://add/{link}" target="_blank" class="self-link link list-group-item list-group-item-action">
+											<a href="#" class="self-link link list-group-item list-group-item-action add-happ-btn">
 												<span>Добавить подписку</span>
-											  	<div class="link-icon"></div>
+												<div class="link-icon"></div>
 											</a>
-							    </div>
+											<div class="happ-link" style="margin-top:7px; font-size:0.95rem; color:#aaa; word-break:break-all;"></div>
+										</div>
 									</li>
 									<li class="step-item">
 										<div class="step-icon">3</div>
@@ -1097,11 +1071,12 @@
 										<div class="step-content">
 											<div class="step-title">Добавить подписку</div>
 											<div class="step-desc">Нажмите кнопку ниже — приложение откроется, и подписка добавится автоматически.</div>
-											<a href="happ://add/{link}" target="_blank" class="self-link link list-group-item list-group-item-action">
-										<span>Добавить подписку</span>
-											  	<div class="link-icon"></div>
-									</a>
-								</div>
+											<a href="#" class="self-link link list-group-item list-group-item-action add-happ-btn">
+												<span>Добавить подписку</span>
+												<div class="link-icon"></div>
+											</a>
+											<div class="happ-link" style="margin-top:7px; font-size:0.95rem; color:#aaa; word-break:break-all;"></div>
+										</div>
 									</li>
 									<li class="step-item">
 										<div class="step-icon">3</div>
@@ -1140,11 +1115,12 @@
 										<div class="step-content">
 											<div class="step-title">Добавить подписку</div>
 											<div class="step-desc">Нажмите кнопку ниже — приложение откроется, и подписка добавится автоматически.</div>
-											<a href="happ://add/{link}" target="_blank" class="self-link link list-group-item list-group-item-action">
+											<a href="#" class="self-link link list-group-item list-group-item-action add-happ-btn">
 												<span>Добавить подписку</span>
-											  	<div class="link-icon"></div>
-									</a>
-								</div>
+												<div class="link-icon"></div>
+											</a>
+											<div class="happ-link" style="margin-top:7px; font-size:0.95rem; color:#aaa; word-break:break-all;"></div>
+										</div>
 									</li>
 									<li class="step-item">
 										<div class="step-icon">3</div>
@@ -1205,5 +1181,72 @@
 			</div>
 		</div>
 	</main>
+	<script type="text/javascript">
+
+		function showNotification(notificationElementId) {
+		  	let notification = document.getElementById(notificationElementId)
+		    notification.className = "show";
+		    setTimeout(() => { 
+		    	notification.className = notification.className.replace("show", ""); 
+		    }, 2900);
+		}
+		
+		function copyToClipboard(text) {
+			navigator.clipboard.writeText(text);
+			showNotification('toast');
+		}
+
+		const buttonSwitchTheme = document.getElementById('btnSwitchTheme');
+		buttonSwitchTheme.checked = currentThemeSetting === 'dark';
+		buttonSwitchTheme.addEventListener("click", () => {
+			  const newTheme = currentThemeSetting === "dark" ? "light" : "dark";
+			  setTheme(newTheme);			  
+		});
+		document.addEventListener('DOMContentLoaded', function() {
+			document.querySelectorAll('a.self-link').forEach(function(link) {
+				if (link.getAttribute('href').includes('{link}')) {
+					link.setAttribute('href', link.getAttribute('href').replace('{link}', window.location.href));
+				}
+			});
+		});
+	</script>
+
+	<script>
+	function getHappLink() {
+	  return 'happ://add/' + window.location.href;
+	}
+	document.querySelectorAll('.add-happ-btn').forEach(function(btn) {
+	  btn.onclick = function(e) {
+	    e.preventDefault();
+	    window.location.href = getHappLink();
+	    
+	    // Показываем модальное окно через 5 секунд
+	    setTimeout(function() {
+	      var supportModal = new bootstrap.Modal(document.getElementById('supportModal'));
+	      supportModal.show();
+	    }, 5000);
+	  };
+	});
+	</script>
+
+	<div class="modal fade" id="supportModal" tabindex="-1" aria-labelledby="supportModalLabel" aria-hidden="true">
+	  <div class="modal-dialog modal-dialog-centered">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title" id="supportModalLabel">Не открылось приложение?</h5>
+	        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+	      </div>
+	      <div class="modal-body">
+	        <p>Напишите нам в поддержку, и мы вам поможем!</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+	        <a href="https://t.me/your_support" target="_blank" class="btn btn-primary">Написать в поддержку</a>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+
 	</body>
+
 </html>
